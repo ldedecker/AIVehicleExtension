@@ -1,0 +1,714 @@
+swagger: "2.0"
+info:
+  description: Elements communs aux routes V360
+  version: 2.1.2
+  title: Commons    
+basePath: /vtc/api/v2
+paths: {}
+definitions:
+  CleApplicative:
+    type: object
+    properties:
+      identifiantFonctionnel:
+        type: string
+        example: "1571101053074"
+      codeApplication:
+        $ref: "commons.yml#/definitions/Nomenclature"
+  DenominationOfficiellePMSansDates:
+    type: object
+    properties:
+      enseigne:
+        type: string
+        example: "BUREAU VERITAS"
+  DenominationOfficiellePM:
+    type: object
+    properties:
+      enseigne:
+        type: string
+        example: "BUREAU VERITAS"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2018-11-30"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2018-10-30"
+  Identifiant:
+    type: object
+    properties:
+      identifiantFonctionnel:
+        type: string
+  Particularite:
+    type: object
+    properties:
+      typeParticularite:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+
+  Domaine:
+    type: object
+    properties:
+      nomDomaine:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      typeDeRelationPersonneDomaine:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  CoordonneeBancaireIban:
+    type: object
+    properties:
+      numeroCompte:
+        type: string
+        example: "00002326631"
+      indicateurCompteJoint:
+        type: boolean
+        example: false
+      BIC:
+        type: string
+        example: "BNPAFRPPXXX"
+      cleRIB:
+        type: string
+        example: "67"
+      indicateurCompteClos:
+        type: boolean
+        example: false
+      nomTitulaire:
+        type: string
+        example: " M SAUVAGE JEAN"
+      codeGuichet:
+        type: string
+        example: "00842"
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      codeBanque:
+        type: string
+        example: "30004"
+      nomCoTitulaire:
+        type: string
+        example: ""
+      dateConnaissanceCompteClos:
+        type: string
+        format: date
+        example: "2022-09-01"
+      IBAN:
+        type: string
+        example: "FR7630004008420000232663167"
+      pays:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurTitulaireCompte:
+        type: boolean
+        example: true
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  CoordonneesBancairesEtrangeres:
+    type: object
+    properties:
+      nomCoTitulaire:
+        type: string
+        example: ""
+      indicateurCompteClos:
+        type: boolean
+        example: false
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      pays:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateConnaissanceCompteClos:
+        type: string
+        format: date
+        example: "2022-09-01"
+      indicateurCompteJoint:
+        type: boolean
+        example: false
+      nomTitulaire:
+        type: string
+        example: " M SAUVAGE JEAN"
+      agenceEtNumeroCompte:
+        type: string
+        example: "NUM COMPTE ETRANGER"
+      nomBanque:
+        type: string
+        example: "NOM BANQUE ETRANGERE"
+      indicateurTitulaireCompte:
+        type: boolean
+        example: true
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  CoordonneesBancaires:
+    type: object
+    properties:
+      coordonneesBancairesIban:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/CoordonneeBancaireIban"
+      coordonneesBancairesEtrangeres:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/CoordonneesBancairesEtrangeres"
+  Email:
+    type: object
+    properties:
+      adresseMail:
+        type: string
+        example: "acbretigniere@gmail.com"
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+      indicateurValidite:
+        type: boolean
+        example: false
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2018-11-30"
+  Telephone:
+    type: object
+    properties:
+      typeTelephone:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      poste:
+        type: string
+        example: ""
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+      numeroTelephone:
+        type: string
+        example: "0321638686"
+      indicateurValidite:
+        type: boolean
+        example: true
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      indicatifPays:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2018-11-30"
+  Fax:
+    type: object
+    properties:
+      indicateurValidite:
+        type: boolean
+        example: true
+      numeroFax:
+        type: string
+        example: "0101010101"
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  MoyensDeContact:
+    type: object
+    properties:
+      emails:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/Email"
+      telephones:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/Telephone"
+      fax:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/Fax"
+  PlisNonDistribues:
+    type: object
+    properties:
+      dateObtentionPND:
+        type: string
+        format: date
+        example: "2022-09-01"
+      motifPND:
+        $ref: "commons.yml#/definitions/Nomenclature"
+  AdresseFrancaise:
+    type: object
+    properties:
+      indicateurCedex:
+        type: boolean
+        example: false
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      complementIdentification:
+        type: string
+        example: ""
+      mentionSpeciale:
+        type: string
+        example: "Boite postale 7"
+      complementDistribution:
+        type: string
+        example: ""
+      plisNonDistribues:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/PlisNonDistribues"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      commune:
+        type: string
+        example: "ST JEAN DE LA RUELLE"
+      nomVoie:
+        type: string
+        example: "RUE DAMAS BLANC"
+      lieuDit:
+        type: string
+        example: ""
+      latitude:
+        type: string
+        example: ""
+      numero:
+        type: string
+        example: "5"
+      repetition:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      idAdresse:
+        type: string
+        example: "/RP/GEO/201804010000000000073"
+      communeAcheminement:
+        type: string
+        example: ""
+      codePostal:
+        type: string
+        example: "97610"
+      codeInsee:
+        type: string
+        example: "55577"
+      nomVoieAfnor:
+        type: string
+        example: "RUE DAMAS BLANC"
+      longitude:
+        type: string
+        example: "5"
+  AdresseEtrangere:
+    type: object
+    properties:
+      nomVoieEtrangere:
+        type: string
+        example: "65  PLACE RUE TRUC"
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      pays:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      mentionSpeciale:
+        type: string
+        example: "BOITE POSTALE TROIS"
+      localiteEtrangere:
+        type: string
+        example: " 90000 AGADIR"
+      complementIdentification:
+        type: string
+        example: "IDE TROIS"
+      complementDistribution:
+        type: string
+        example: "DISTRIB TROIS"
+      plisNonDistribues:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/PlisNonDistribues"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2010-07-19"
+  AdressesPostales:
+    type: object
+    properties:
+      adresseFrancaisePrincipale:
+        $ref: "commons.yml#/definitions/AdresseFrancaise"
+      adressesFrancaisesAutres:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/AdresseFrancaise"
+      adresseEtrangerePrincipale:
+        $ref: "commons.yml#/definitions/AdresseEtrangere"
+      adressesEtrangeresAutres:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/AdresseEtrangere"
+  PersonnePhysique:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ID RCU de la personne physique
+      genre:
+        type: string
+        enum:
+          - homme
+          - femme
+          - non défini
+        description: Genre de la personne
+      denomination:
+        type: object
+        properties:
+          denominationOfficielle:
+            type: object
+            properties:
+              nomPatronymique:
+                type: string
+                description: Nom patronymique de la personne
+                example: Doe
+              nomMarital:
+                type: string
+                description: Nom marital de la personne si existant
+                example: Dane
+              prenom:
+                type: string
+                description: Prénom de la personne
+                example: John
+              dateDebutEffet:
+                type: string
+                format: date
+                example: "2002-09-01"
+              dateFinEffet:
+                type: string
+                format: date
+                example: "2018-11-30"
+      nir:
+        type: string
+        description: Numéro NIR de la personne (sans clé)
+        example: "1880577132087"
+      cleNir:
+        type: string
+        description: Clé NIR de la personne
+        example: "87"
+  Nomenclature:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Code interpretable par une machine
+      libelle:
+        type: string
+        description: Libellé lisible par un humain
+  Notification:
+    type: object
+    properties:
+      id:
+        type: string
+        description: ID de la notification attribué par la brique de notification
+      dateEmissionNotif:
+        type: string
+        format: date
+        example: "2000-07-19"
+      etablissement:
+        type: object
+        properties:
+          id:
+            type: string
+            description: id RCU de l'établissement
+          siret:
+            type: string
+          denomination:
+            type: object
+            properties:
+              denominationOfficielle:
+                type: object
+                properties:
+                  enseigne:
+                    type: string
+                    description: enseigen valide à date du jour
+                  dateDebutEffet:
+                    type: string
+                    format: date
+                    example: "2002-09-01"
+                  dateFinEffet:
+                    type: string
+                    format: date
+                    example: "2018-11-30"
+      theme:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      etat:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      type:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateEvenementMetier:
+        type: string
+        format: date
+        example: "2000-07-19"
+      sourceDeNotification:
+        type: string
+        description: Application à la source de la notification
+        example: AIA
+      idNotificationSource:
+        type: string
+        description: ID dans l'application source de la notification
+      contenuNotification:
+        type: string
+        description: Contenu de la notification au format JSON
+  GelDesAvoirs:
+    type: object
+    properties:
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2018-11-30"
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+      statutGDA:
+        $ref: "commons.yml#/definitions/Nomenclature"
+  PersonnePolitiquementExposee:
+    type: object
+    properties:
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2002-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2018-11-30"
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+      statutPPE:
+        $ref: "commons.yml#/definitions/Nomenclature"
+  Devise:
+    type: string
+    description: Devise utilisée lors du mouvement financier au format alphabétique de la norme ISO 4217
+    example: EUR
+  Error:
+    type: "object"
+    description: Structure de réponse ne contenant que le status
+    properties:
+      status:
+        $ref: "#/definitions/Status"
+  Status:
+    type: "object"
+    description: Status de la réponse contenant des messages
+    properties:
+      messages:
+        type: "array"
+        items:
+          $ref: "#/definitions/Message"
+  Message:
+    type: "object"
+    description: Message de status
+    required: [idAppliOrigine, code, severite]
+    properties:
+      idAppliOrigine:
+        type: "string"
+        example: "VTC"
+        description: Application à l'origine du message
+      code:
+        type: "string"
+        description: Code issu de l'application d'origine
+      severite:
+        type: "string"
+        example: "erreur"
+        enum:
+          - info
+          - alerte
+          - erreur
+      libelle:
+        type: "string"
+      details:
+        type: "array"
+        description: Informations complémentaires
+        items:
+          type: "string"
+parameters:
+  mmUserId:
+    name: MM-UserId
+    in: header
+    description: ID fonctionnel RCU de la personne physique lorsque la source est "ciam", paramètre dans le Header
+    required: false
+    type: string
+  mmUserAuthenticationSource:
+    name: MM-UserAuthenticationSource
+    in: header
+    description: Type de l'utilisateur connecté (ciam, adfs,...), paramètre dans le Header
+    required: false
+    type: string
+  mmGroupIds:
+    name: MM-GroupIds
+    in: header
+    description: Liste de groupes AD (lorsque la source est adfs) séparée par une virgule et un espace, paramètre dans le Header
+    required: false
+    type: string
+  mmAppId:
+    name: MM-AppId
+    in: header
+    description: Trigramme du compte applicatif appelant, paramètre dans le Header
+    required: false
+    type: string
+  filtreDateDebut:
+    name: dateDebut
+    in: query
+    description: Filtre sur les entités postérieurs à cette date (incluse). Prend la date du jour de l'appel du service par défaut.
+    type: string
+    format: date
+  filtreDateFin:
+    name: dateFin
+    in: query
+    description: Filtre sur les entités antérieurs à cette date (incluse). Prend la date du jour de l'appel du service par défaut.
+    type: string
+    format: date
+  limite:
+    name: limite
+    in: query
+    description: Nombre de résultats par page
+    type: integer
+    minimum: 1
+  index:
+    name: index
+    in: query
+    description: Numéro de page à retourner
+    type: integer
+    minimum: 1
+  domaine:
+    name: domaineProduit
+    in: query
+    description: Domaine du produit relié à l'adhésion (C2)
+    type: string
+  statutClient:
+    name: statutClient
+    in: query
+    description: Code statut client (ACT pour actif, INA pour inactif)
+    type: string
+  codePostal:
+    name: codePostal
+    in: query
+    description: Code postal de l'adresse principale valide à date du jour
+    type: string
+  commune:
+    name: commune
+    in: query
+    description: Commune de l'adresse principale valide à date du jour (insensible à la casse)
+    type: string
+  numeroTelephone:
+    name: numeroTelephone
+    in: query
+    description: Numéro de téléphone de tous types sur 10 caractères continus (actifs et inactifs)
+    type: string
+  addMigFlag:
+    name: addMigFlag
+    in: query
+    description: Personne migrée
+    type: boolean
+  indicateurVIP:
+    name: indicateurVIP
+    in: query
+    description: Indicateur VIP false ou true
+    type: boolean
+  indicateurSensible:
+    name: indicateurSensible
+    in: query
+    description: Indicateur sensible false ou true
+    type: boolean
+  AdresseFrancaisePrincipale:
+    type: object
+    properties:
+      numero:
+        type: string
+        example: "5"
+      repetition:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      nomVoie:
+        type: string
+      codePostal:
+        type: string
+      commune:
+        type: string
+responses:
+  InvalidCriteria:
+    description: Critères de recherche invalides
+    schema:
+      $ref: "#/definitions/Error"
+  BadRequest:
+    description: Mauvaise requête
+    schema:
+      $ref: "#/definitions/Error"
+  Unauthorized:
+    description: Non autorisé
+    schema:
+      $ref: "#/definitions/Error"
+  MethodNotAllowed:
+    description: Méthode non autorisée
+    schema:
+      $ref: "#/definitions/Error"
+  Forbidden:
+    description: Accès interdit à cette ressource
+    schema:
+      $ref: "#/definitions/Error"
+  NotFound:
+    description: Ressource inexistante
+    schema:
+      $ref: "#/definitions/Error"
+  InvalidRange:
+    description: Le nombre d’objets demandé par page dépasse la limite autorisée
+    schema:
+      $ref: "#/definitions/Error"
+  InternalError:
+    description: Erreur interne au serveur
+    schema:
+      $ref: "#/definitions/Error"
+  UnprocessableEntity:
+    description: Une date est manquante
+    schema:
+      $ref: "#/definitions/Error"

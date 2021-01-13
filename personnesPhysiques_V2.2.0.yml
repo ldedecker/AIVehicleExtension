@@ -1,0 +1,724 @@
+swagger: "2.0"
+info:
+  description: Routes de gestion des personnes physiques
+  version: 2.2.0
+  title: V360
+host: vlc3app036:8080
+basePath: /vtc/transverse/personnesPhysiques/v2
+# Défini basicAuth:
+securityDefinitions:
+  basicAuth:
+    type: basic
+# Applique basicAuth à toutes les ressources :
+security:
+  - basicAuth: []
+tags:
+  - name: personnesPhysiques
+    description: Services de consultation des personnesPhysiques
+schemes:
+  - http # for DEV only
+  - https
+paths:
+  /personnesPhysiques/{identifiantFonctionnel}/detail:
+    get:
+      tags:
+        - personnesPhysiques
+      summary: Detail d'une personne physique
+      description: Detail d'une personne physique via son identifiant fonctionnel RCU
+      produces:
+        - application/json
+      parameters:
+        - $ref: "commons.yml#/parameters/mmUserId"
+        - $ref: "commons.yml#/parameters/mmUserAuthenticationSource"
+        - $ref: "commons.yml#/parameters/mmGroupIds"
+        - $ref: "commons.yml#/parameters/mmAppId"
+        - name: identifiantFonctionnel
+          in: path
+          description: identifiant RCU
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/personnePhysique"
+        "400":
+          $ref: commons.yml#/responses/InvalidCriteria
+        "401":
+          $ref: commons.yml#/responses/Unauthorized
+        "404":
+          $ref: commons.yml#/responses/NotFound
+        "405 ":
+          $ref: commons.yml#/responses/MethodNotAllowed
+        "500":
+          $ref: commons.yml#/responses/InternalError
+  /personnesPhysiques/detail:
+    get:
+      tags:
+        - personnesPhysiques
+      summary: Detail d'une personne physique
+      description: Detail d'une personne physique via le couple code application et identifiant application
+      produces:
+        - application/json
+      parameters:
+        - $ref: "commons.yml#/parameters/mmUserId"
+        - $ref: "commons.yml#/parameters/mmUserAuthenticationSource"
+        - $ref: "commons.yml#/parameters/mmGroupIds"
+        - $ref: "commons.yml#/parameters/mmAppId"
+        - name: identifiantApplication
+          in: query
+          description: identifiant application
+          required: true
+          type: string
+        - name: codeApplication
+          in: query
+          description: code application
+          required: true
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/personnePhysique"
+        "400":
+          $ref: commons.yml#/responses/InvalidCriteria
+        "401":
+          $ref: commons.yml#/responses/Unauthorized
+        "404":
+          $ref: commons.yml#/responses/NotFound
+        "405":
+          $ref: commons.yml#/responses/MethodNotAllowed
+        "500":
+          $ref: commons.yml#/responses/InternalError
+  /personnesPhysiques/search:
+    get:
+      tags:
+        - personnesPhysiques
+      summary: Liste de personnes physiques
+      description: Liste de personnes physiques
+      produces:
+        - application/json
+      parameters:
+        - $ref: "commons.yml#/parameters/mmUserId"
+        - $ref: "commons.yml#/parameters/mmUserAuthenticationSource"
+        - $ref: "commons.yml#/parameters/mmGroupIds"
+        - $ref: "commons.yml#/parameters/mmAppId"
+        - name: q
+          in: query
+          description: nom patronymique et/ou nom marital et/ou prenom (insensible à la casse)
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: adresse email valide à date du jour (insensible à la casse)
+          required: false
+          type: string
+        - name: codeCommuneNaissance
+          in: query
+          description: Code Insee de la commune de naissance sur 5 Chiffres
+          required: false
+          type: string
+        - name: paysNaissance
+          in: query
+          description: Code pays sur 3 Chiffres ( ex France 100, Portugal 139.. )
+          required: false
+          type: string
+        - name: genre
+          in: query
+          description: Genre de l'individu (F pour Féminin, M pour Masculin, I pour Inconnu)
+          required: false
+          type: string
+        - $ref: commons.yml#/parameters/statutClient
+        - $ref: commons.yml#/parameters/addMigFlag
+        - $ref: commons.yml#/parameters/codePostal
+        - $ref: commons.yml#/parameters/commune
+        - $ref: commons.yml#/parameters/numeroTelephone
+        - $ref: commons.yml#/parameters/limite
+        - $ref: commons.yml#/parameters/index
+        - in: query
+          name: dateDeNaissance
+          type: string
+          description: dateDeNaissance de la personne physique (Format AAAA-MM-JJ)
+        - in: query
+          name: communeNaissance
+          type: string
+          description: communeNaissance de la personne physique
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/personnesPhysiques"
+        "400":
+          $ref: commons.yml#/responses/BadRequest
+        "400 ":
+          $ref: commons.yml#/responses/InvalidCriteria
+        "401":
+          $ref: commons.yml#/responses/Unauthorized
+        "404":
+          $ref: commons.yml#/responses/NotFound
+        "405":
+          $ref: commons.yml#/responses/MethodNotAllowed
+        "416":
+          $ref: commons.yml#/responses/InvalidRange
+        "500":
+          $ref: commons.yml#/responses/InternalError
+
+definitions:
+  DenominationOfficielle:
+    type: object
+    properties:
+      nomPatronymique:
+        type: string
+      prenom:
+        type: string
+      nomMarital:
+        type: string
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2005-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  DenominationDeCommunication:
+    type: object
+    properties:
+      nomPatronymique:
+        type: string
+      prenom:
+        type: string
+      nomMarital:
+        type: string
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2005-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  CleApplicative:
+    type: object
+    properties:
+      id:
+        type: string
+        example: "1571101053074"
+      idTechnique:
+        type: string
+        example: "1571101053074"
+      codeApplication:
+        $ref: "commons.yml#/definitions/Nomenclature"
+  personnesPhysiques:
+    type: object
+    properties:
+      id:
+        type: string
+        example: "25475274"
+        description: id RCU personne physique
+      titre:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      statutClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      civilite:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      codeProvenance:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      nir:
+        type: string
+        example:
+      cleNir:
+        type: string
+        example:
+      codeCommuneNaissance:
+        type: string
+        example: "99"
+      communeNaissance:
+        type: string
+        example: "Tetouan"
+      genre:
+        type: string
+        example: "F"
+      dateDeNaissance:
+        type: string
+        format: date
+        example: "1989-09-01"
+      paysNaissance:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      adresseFrancaisePrincipale:
+        $ref: "commons.yml#/parameters/AdresseFrancaisePrincipale"
+      denomination:
+        type: object
+        properties:
+          denominationsOfficielles:
+            type: array
+            items:
+              $ref: "#/definitions/DenominationOfficielle"
+          denominationsDeCommunication:
+            type: array
+            items:
+              $ref: "#/definitions/DenominationDeCommunication"
+      clesApplicatives:
+        type: array
+        items:
+          $ref: "#/definitions/CleApplicative"
+      MIG:
+        type: boolean
+        example: false
+  Deces:
+    type: object
+    properties:
+      dateDeDeces:
+        type: string
+        format: date
+        example: "2022-09-01"
+      indicateurDecesCertifie:
+        type: boolean
+        example: false
+  Fiscalite:
+    type: object
+    properties:
+      indicateurDomiciliationFiscaleALEtranger:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurISF:
+        type: boolean
+        example: false
+      paysResidenceFiscale:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      situationFiscale:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  SituationFamiliale:
+    type: object
+    properties:
+      situationFamiliale:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+  Nationalite:
+    type: object
+    properties:
+      nationalite:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  DenominationOfficielleDetail:
+    type: object
+    properties:
+      nomPatronymique:
+        type: string
+      prenom:
+        type: string
+      autresPrenoms:
+        type: string
+      nomMarital:
+        type: string
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2005-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  DenominationDeCommunicationDetail:
+    type: object
+    properties:
+      nomPatronymique:
+        type: string
+      prenom:
+        type: string
+      autresPrenoms:
+        type: string
+      nomMarital:
+        type: string
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2005-09-01"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+  Denomination:
+    type: object
+    properties:
+      denominationsOfficielles:
+        type: array
+        items:
+          $ref: "#/definitions/DenominationOfficielleDetail"
+      denominationsDeCommunication:
+        type: array
+        items:
+          $ref: "#/definitions/DenominationDeCommunicationDetail"
+  AdresseFrancaise:
+    type: object
+    properties:
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+      indicateurCedex:
+        type: boolean
+        example: false
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      complementIdentification:
+        type: string
+        example: ""
+      mentionSpeciale:
+        type: string
+        example: "Boite postale 7"
+      complementDistribution:
+        type: string
+        example: ""
+      plisNonDistribues:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/PlisNonDistribues"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      commune:
+        type: string
+        example: "ST JEAN DE LA RUELLE"
+      nomVoie:
+        type: string
+        example: "RUE DAMAS BLANC"
+      lieuDit:
+        type: string
+        example: ""
+      latitude:
+        type: string
+        example: ""
+      numero:
+        type: string
+        example: "5"
+      repetition:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      idAdresse:
+        type: string
+        example: "/RP/GEO/201804010000000000073"
+      communeAcheminement:
+        type: string
+        example: ""
+      codePostal:
+        type: string
+        example: "97610"
+      codeInsee:
+        type: string
+        example: "55577"
+      nomVoieAfnor:
+        type: string
+        example: "RUE DAMAS BLANC"
+      longitude:
+        type: string
+        example: "5"
+  AdresseEtrangere:
+    type: object
+    properties:
+      identifiantTechnique:
+        type: string
+        example: "1ca487c5-8493-49c9-beef-fec8709f1bac"
+      nomVoieEtrangere:
+        type: string
+        example: "65  PLACE RUE TRUC"
+      indicateurPrivilegie:
+        type: boolean
+        example: true
+      pays:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      mentionSpeciale:
+        type: string
+        example: "BOITE POSTALE TROIS"
+      localiteEtrangere:
+        type: string
+        example: " 90000 AGADIR"
+      complementIdentification:
+        type: string
+        example: "IDE TROIS"
+      complementDistribution:
+        type: string
+        example: "DISTRIB TROIS"
+      plisNonDistribues:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/PlisNonDistribues"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2010-07-19"
+  AdressesPostales:
+    type: object
+    properties:
+      adresseFrancaisePrincipale:
+        $ref: "#/definitions/AdresseFrancaise"
+      adressesFrancaisesAutres:
+        type: array
+        items:
+          $ref: "#/definitions/AdresseFrancaise"
+      adresseEtrangerePrincipale:
+        $ref: "#/definitions/AdresseEtrangere"
+      adressesEtrangeresAutres:
+        type: array
+        items:
+          $ref: "#/definitions/AdresseEtrangere"
+  Entreprise:
+    type: object
+    properties:
+      categorieSocioProfessionelle:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurTNS:
+        type: boolean
+        example: false
+      posteOccupe:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      id:
+        type: string
+        example: "5651867414638"
+        description: "Id RCU de l'entreprise"
+      siren:
+        type: string
+        example: "369258147"
+      statutClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurVIP:
+        type: boolean
+        example: false
+      indicateurSensible:
+        type: boolean
+        example: false
+      denomination:
+        $ref: "#/definitions/DenominationEntreprise"
+  Etablissement:
+    type: object
+    properties:
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2022-09-01"
+      siege:
+        type: boolean
+        example: false
+      nic:
+        type: string
+        example: "00007"
+      conventionCollectiveAppliquee:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      id:
+        type: string
+        example: "112351456"
+        description: "ID RCU de l'établissement"
+      siret:
+        type: string
+        example: "14725836900007"
+      indicateurSensible:
+        type: boolean
+        example: false
+      statutClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurVIP:
+        type: boolean
+        example: false
+      denomination:
+        $ref: "#/definitions/DenominationEtablissement"
+  DenominationEntreprise:
+    type: object
+    properties:
+      denominationsOfficielles:
+        type: array
+        items:
+          $ref: "personnesMorales_V2.yml#/definitions/DenominationsOfficiellesEntreprise"
+  DenominationEtablissement:
+    type: object
+    properties:
+      denominationsOfficielles:
+        type: array
+        items:
+          $ref: "personnesMorales_V2.yml#/definitions/DenominationsOfficiellesEtablissement"
+  LienDeParente:
+    type: object
+    properties:
+      typeDeLienPersonnePhysique:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      id:
+        type: string
+        example: "25475274"
+        description: Id fonctionnel de l'individu rattaché
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2009-09-01"
+      civilite:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      denomination:
+        $ref: "#/definitions/DenominationLienDeParente"
+      dateDeNaissance:
+        type: string
+        format: date
+        example: "1989-09-01"
+  DenominationLienDeParente:
+    type: object
+    properties:
+      denominationsOfficielles:
+        type: array
+        items:
+          $ref: "#/definitions/DenominationOfficielle"
+
+  personnePhysique:
+    type: object
+    properties:
+      statutClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurVIP:
+        type: boolean
+        example: false
+      genre:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      codeProvenance:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      MIG:
+        type: boolean
+        example: false
+      indicateurSensible:
+        type: boolean
+        example: false
+      prefCommRelationAvecClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateDeNaissance:
+        type: string
+        format: date
+        example: "1989-09-01"
+      communeNaissance:
+        type: string
+        example:
+      indicateurRefusDematerialisation:
+        type: boolean
+        example: false
+      paysNaissance:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      nir:
+        type: string
+        example: "1571101053074"
+      dateDisparition:
+        type: string
+        format: date
+        example: "1989-09-01"
+      cleNir:
+        type: string
+        example: "15"
+      civilite:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      codeCommuneNaissance:
+        type: string
+        example: "111"
+      titre:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      dateNaissanceLunaire:
+        type: string
+        example: "1989-09-01"
+      id:
+        type: string
+        example: "111"
+        description: "Id RCU de la personne physique"
+      deces:
+        $ref: "#/definitions/Deces"
+      fiscalite:
+        $ref: "#/definitions/Fiscalite"
+      situationsFamiliales:
+        type: array
+        items:
+          $ref: "#/definitions/SituationFamiliale"
+      clesApplicatives:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/CleApplicative"
+      nationalites:
+        type: array
+        items:
+          $ref: "#/definitions/Nationalite"
+      particularites:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/Particularite"
+      domaines:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/Domaine"
+      coordonneeBancaire:
+        $ref: "commons.yml#/definitions/CoordonneesBancaires"
+      denomination:
+        $ref: "#/definitions/Denomination"
+      moyenDeContact:
+        $ref: "commons.yml#/definitions/MoyensDeContact"
+      adressePostale:
+        $ref: "#/definitions/AdressesPostales"
+      entreprises:
+        type: array
+        items:
+          $ref: "#/definitions/Entreprise"
+      etablissements:
+        type: array
+        items:
+          $ref: "#/definitions/Etablissement"
+      liensDeParente:
+        type: array
+        items:
+          $ref: "#/definitions/LienDeParente"
+      gelsDesAvoirs:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/GelDesAvoirs"
+      personnesPolitiquementExposees:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/PersonnePolitiquementExposee"

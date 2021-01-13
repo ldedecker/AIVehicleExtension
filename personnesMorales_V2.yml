@@ -1,0 +1,227 @@
+swagger: "2.0"
+info:
+  description: Routes de gestion des personnes morales
+  version: 2.1.0
+  title: V360
+host: vlc1app094:8080
+basePath: /vtc/transverse/personnesMorales/v2
+# Défini basicAuth:
+securityDefinitions:
+  basicAuth:
+    type: basic
+# Applique basicAuth à toutes les ressources :
+security:
+  - basicAuth: []
+tags:
+  - name: personnesMorales
+    description: Services de consultation des personnes morales
+schemes:
+  - http # for DEV only
+  - https
+paths:
+  /personnesMorales/search:
+    get:
+      tags:
+        - personnesMorales
+      summary: Liste de personnes morales
+      description: Liste de personnes morales
+      produces:
+        - application/json
+      parameters:
+        - $ref: "commons.yml#/parameters/mmUserId"
+        - $ref: "commons.yml#/parameters/mmUserAuthenticationSource"
+        - $ref: "commons.yml#/parameters/mmGroupIds"
+        - $ref: "commons.yml#/parameters/mmAppId"
+        - name: q
+          in: query
+          description: >-
+            Pour l'entreprise possibilité de rechercher sur le sigle, la raison
+            sociale, le siren. Pour l'établissement possibilité de rechercher
+            sur l'enseigne et le siret (insensible à la casse).
+          required: true
+          type: string
+        - $ref: "commons.yml#/parameters/statutClient"
+        - $ref: "commons.yml#/parameters/indicateurSensible"
+        - $ref: "commons.yml#/parameters/indicateurVIP"
+        - $ref: "commons.yml#/parameters/codePostal"
+        - $ref: "commons.yml#/parameters/addMigFlag"
+        - $ref: "commons.yml#/parameters/limite"
+        - $ref: "commons.yml#/parameters/index"
+        - in: query
+          name: type
+          required: false
+          type: string
+          description: Valeur 'entreprise' ou 'etablissement'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/personnesMorales"
+        "400":
+          $ref: commons.yml#/responses/BadRequest
+        "400 ":
+          $ref: commons.yml#/responses/InvalidCriteria
+        "401 ":
+          $ref: commons.yml#/responses/Unauthorized
+        "404 ":
+          $ref: commons.yml#/responses/NotFound
+        "405 ":
+          $ref: commons.yml#/responses/MethodNotAllowed
+        "416 ":
+          $ref: commons.yml#/responses/InvalidRange
+        "500":
+          $ref: commons.yml#/responses/InternalError
+definitions:
+  DenominationsOfficiellesEntreprise:
+    type: object
+    properties:
+      raisonSociale:
+        type: string
+        example: LI RAISON SOCIALE PEE0036 8
+      sigle:
+        type: string
+        example: LI NOM PEE0041 8
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+  DenominationEntreprise:
+    type: object
+    properties:
+      denominationsOfficielles:
+        type: array
+        items:
+          $ref: "#/definitions/DenominationsOfficiellesEntreprise"
+  DenominationsOfficiellesEtablissement:
+    type: object
+    properties:
+      enseigne:
+        type: string
+        example: LI RAISON SOCIALE PEE0036 8
+      dateDebutEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+      dateFinEffet:
+        type: string
+        format: date
+        example: "2000-07-19"
+  DenominationEtablissement:
+    type: object
+    properties:
+      denominationsOfficielles:
+        type: array
+        items:
+          $ref: "#/definitions/DenominationsOfficiellesEtablissement"
+  Entreprise:
+    type: object
+    properties:
+      siren:
+        type: string
+        example: "102354687"
+      statutClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurVIP:
+        type: boolean
+        example: false
+      indicateurSensible:
+        type: boolean
+        example: false
+      codeProvenance:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      id:
+        type: string
+        example: "102354687"
+      clesApplicatives:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/CleApplicative"
+      adresseFrancaisePrincipale:
+        $ref: "commons.yml#/parameters/AdresseFrancaisePrincipale"
+      denomination:
+        $ref: "#/definitions/DenominationEntreprise"
+      MIG:
+        type: boolean
+        example: false
+  Etablissement:
+    type: object
+    properties:
+      siege:
+        type: boolean
+        example: false
+      nic:
+        type: string
+        example: "00015"
+      siret:
+        type: string
+        example: "36925814700015"
+      codeProvenance:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      statutClient:
+        $ref: "commons.yml#/definitions/Nomenclature"
+      indicateurVIP:
+        type: boolean
+        example: false
+      indicateurSensible:
+        type: boolean
+        example: false
+      id:
+        type: string
+        example: "102354687"
+      clesApplicatives:
+        type: array
+        items:
+          $ref: "commons.yml#/definitions/CleApplicative"
+      adresseFrancaisePrincipale:
+        $ref: "commons.yml#/parameters/AdresseFrancaisePrincipale"
+      entreprise:
+        type: object
+        properties:
+          siren:
+            type: string
+          id:
+            type: string
+          denomination:
+            type: object
+            properties:
+              denominationOfficielle:
+                type: object
+                properties:
+                  raisonSociale:
+                    type: string
+                    example: LI RAISON SOCIALE PEE0036 8
+                  dateDebutEffet:
+                    type: string
+                    format: date
+                    example: "2000-07-19"
+                  dateFinEffet:
+                    type: string
+                    format: date
+                    example: "2000-07-19"
+          clesApplicatives:
+            type: array
+            items:
+              $ref: "commons.yml#/definitions/CleApplicative"
+
+      denomination:
+        $ref: "#/definitions/DenominationEtablissement"
+      MIG:
+        type: boolean
+        example: false
+  personnesMorales:
+    type: object
+    properties:
+      entreprises:
+        type: array
+        items:
+          $ref: "#/definitions/Entreprise"
+      etablissements:
+        type: array
+        items:
+          $ref: "#/definitions/Etablissement"
